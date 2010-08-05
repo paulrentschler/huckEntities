@@ -9,7 +9,7 @@
   <property name="content_meta_type">Graduate Program</property>
   <property name="product">HuckEntities</property>
   <property name="factory">addGraduateProgram</property>
-  <property name="immediate_view">base_view</property>
+  <property name="immediate_view">graduateprogram_view</property>
   <property name="global_allow">True</property>
   <property name="filter_content_types">False</property>
   <property name="allowed_content_types"/>

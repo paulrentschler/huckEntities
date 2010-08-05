@@ -9,7 +9,7 @@
   <property name="content_meta_type">Facility</property>
   <property name="product">HuckEntities</property>
   <property name="factory">addFacility</property>
-  <property name="immediate_view">base_view</property>
+  <property name="immediate_view">facility_view</property>
   <property name="global_allow">True</property>
   <property name="filter_content_types">False</property>
   <property name="allowed_content_types"/>
