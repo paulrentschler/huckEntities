@@ -16,6 +16,6 @@ class IFacility(Interface):
 class IEquipment(Interface):
     """A piece of research instrumentation"""
 
-class IStartingPointLayer(IDefaultPloneLayer):
-    """A Layer Specific to StartingPoint"""
+class IHuckEntitiesLayer(IDefaultPloneLayer):
+    """A Layer Specific to HuckEntities"""
     

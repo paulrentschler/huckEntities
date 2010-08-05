@@ -10,4 +10,12 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
     />
 
+    <genericsetup:registerProfile
+        name="uninstall"
+        title="ResearchProject"
+        directory="profiles/uninstall"
+        description="Removes the research project content type"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+
 </configure>
