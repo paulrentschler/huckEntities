@@ -1,0 +1,7 @@
+Changelog
+=========
+
+1.0 (Unreleased)
+----------------
+* Created this product from scratch
+   http://weblion.psu.edu/documentation/plone-documentation/products-from-scratch
