@@ -1,0 +1,13 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+           i18n_domain="Products.HuckEntities">
+
+    <genericsetup:registerProfile
+        name="default"
+        title="HuckEntities"
+        directory="profiles/default"
+        description="Content types for the Huck Institutes web site"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+
+</configure>
