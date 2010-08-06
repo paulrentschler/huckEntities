@@ -1,0 +1,25 @@
+
+h1.equipmentHeading {
+	margin-bottom: 0;
+}
+
+.equipmentModelNumber {
+	font-weight: bold;
+}
+
+#equipmentSidebar {
+	border-left: 1px solid #DEE7EC;
+	float: right;
+	margin-left: 1em;
+	margin-bottom: 2em;
+	padding: 0.2em 0.2em 0.2em 1em;
+	width: 250px;
+}
+
+#equipmentFacility {
+	clear: left;
+}
+
+#equipmentClear {
+	clear: both;
+}
