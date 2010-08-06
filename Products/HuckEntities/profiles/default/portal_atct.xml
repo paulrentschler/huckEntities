@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<atcttool xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <topic_indexes i18n:domain="plone">
+    <index name="getEquipmentType"
+           description="Types assigned to equipment."
+           enabled="True"
+           friendlyName="Equipment Type" 
+           i18n:attributes="description; friendlyName">
+     <criteria>ATSelectionCriterion</criteria>
+     <criteria>ATListCriterion</criteria>
+    </index>
+  
+    <index name="getCampus"
+           description="Campus for institutes, centers, graduate programs, facilities, and equipment."
+           enabled="True"
+           friendlyName="Campus" 
+           i18n:attributes="description; friendlyName">
+     <criteria>ATSelectionCriterion</criteria>
+    </index>
+  </topic_indexes>
+ 
+  <topic_metadata i18n:domain="plone">
+    <metadata name="getEquipmentType"
+              description="The equipment type names associated with Equipment."
+              enabled="True"
+              friendlyName="Equipment Types"
+              i18n:attributes="description; friendlyName" />
+              
+    <metadata name="getCampus"
+              description="The campus where institutes, centers, graduate programs, facilities and equipment are available."
+              enabled="True"
+              friendlyName="Campus"
+              i18n:attributes="description; friendlyName" />
+  </topic_metadata>
+</atcttool>

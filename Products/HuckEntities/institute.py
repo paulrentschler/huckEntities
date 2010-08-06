@@ -10,9 +10,9 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 
 from Products.HuckEntities import HuckEntitiesMessageFactory as _
 from Products.HuckEntities.interfaces import IInstitute
-from Products.HuckEntities.config import PROJECTNAME
 
 from Products.CMFCore.permissions import ModifyPortalContent
+from AccessControl import ClassSecurityInfo
 
 
 InstituteSchema = folder.ATFolderSchema.copy() + atapi.Schema((
@@ -39,6 +39,9 @@ InstituteSchema = folder.ATFolderSchema.copy() + atapi.Schema((
                   'small'       : (250, 250),
                   'mini'        : (200, 200),
                   'thumb'       : (128, 128),
+                  'tile'        : (64, 64),
+                  'icon'        : (32, 32),
+                  'listing'     : (16, 16),
         },
         widget=atapi.ImageWidget(
             label = _(u'Image'),
@@ -65,10 +68,7 @@ InstituteSchema = folder.ATFolderSchema.copy() + atapi.Schema((
             format = 'checkbox',
         ),
         enforceVocabulary = True,
-        vocabulary = [
-            ("University Park", "University Park"),
-            ("Hershey", "Hershey"),
-        ]
+        vocabulary = [ 'University Park', 'Hershey' ],
     ),
     
     atapi.StringField(
@@ -87,7 +87,7 @@ InstituteSchema = folder.ATFolderSchema.copy() + atapi.Schema((
         searchable = False,
         widget = ReferenceBrowserWidget(
             label = _(u'Content Owners'),
-            description = _(u'Indicate the people who have ownership over this area of the site.')
+            description = _(u'Indicate the people who have ownership over this area of the site.'),
             base_query = "_search_people_in_fsd",
             allow_browse = 0,
             allow_search = 1,
@@ -96,7 +96,7 @@ InstituteSchema = folder.ATFolderSchema.copy() + atapi.Schema((
         ),
         allowed_types = ('FSDPerson'),
         multiValued = True,
-        relationship = 'InstituteContentOwners',
+        relationship = 'EntityContentOwners',
     ),
 
 ))
@@ -132,4 +132,4 @@ class Institute(folder.ATFolder, HistoryAwareMixin):
 
 
 
-atapi.registerType(Institute, PROJECTNAME)
+atapi.registerType(Institute, 'HuckEntities')
