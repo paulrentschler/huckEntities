@@ -2,7 +2,7 @@ from zope.i18nmessageid import MessageFactory
 from Products.Archetypes import atapi
 from Products.CMFCore import utils
 from Products.CMFCore.permissions import setDefaultRoles
-#from Products.CMFCore.DirectoryView import registerDirectory
+from Products.CMFCore.DirectoryView import registerDirectory
 
 
 # Define a message factory for when this product is internationalised.
@@ -11,7 +11,7 @@ from Products.CMFCore.permissions import setDefaultRoles
 HuckEntitiesMessageFactory = MessageFactory('Products.HuckEntities')
 
 
-#registerDirectory('skins', globals())
+registerDirectory('skins', globals())
 
 
 import institute
