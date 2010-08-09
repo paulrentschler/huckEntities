@@ -18,12 +18,15 @@ from AccessControl import ClassSecurityInfo
 InstituteSchema = folder.ATFolderSchema.copy() + atapi.Schema((
     
     atapi.TextField(
-        name = 'body',
+        name = 'text',
         required = False,
         searchable = True,
+        validators = ('isTidyHtmlWithCleanup',),
         default_output_type = 'text/x-html-safe',
         widget = atapi.RichWidget(
             label = _(u'Body Text'),
+            rows = 25,
+            allow_file_upload = zconf.ATDocument.allow_document_upload
         ),
     ),
 
