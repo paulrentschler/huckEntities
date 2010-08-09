@@ -14,7 +14,7 @@
                                   getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                                   templateId template/getId;
                                   text here/getBody;
-                                  parentFacility context/getFacility;">
+                                  parentFacility python: context.getParentFacility();">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
@@ -32,54 +32,28 @@
             Title
           </metal:field>
         </p>
-
-        <div tal:replace="structure provider:plone.abovecontentbody" />
-
-        <div id="equipmentSidebar">
-          <div class="equipmentImageContainer"
-               tal:condition="here/image_mini|nothing">
-            <a href="#"
-               tal:attributes="href string:$here_url/image/image_view_fullscreen"
-               id="parent-fieldname-image">
-              <img tal:replace="structure python: here.tag(scale='mini', css_class='equipmentImage' title='Photo of the equipment' alt=context/title)" src="" alt="" />
-            </a>
-            <p class="discreet">
-              <metal:field use-macro="python:here.widget('imageCaption', mode='view')">
-                Image Caption
-              </metal:field>
-            </p>
-          </div>
-
-          <div id="equipmentExternalUsers"
-               tal:condition="python:here.externalUsers and here.externalUsers != 'Not sure'">
-            <h3>Can researchers come to the facility and use this instrument?</h3>
-            <p><span tal:replace="context/externalUsers">Yes or No</span></p>
-          </div>
-
-          <div id="equipmentFacility">
-            <tal:ifParentFacilityExists tal:condition="exists:parentFacility/verifyFacility">
-              <h3>Equipment Location</h3>
-              <p>
-                <a href="" tal:attributes="href parentFacility/absolute_url">
-                  <span id="equipmentFacilityTitle"
-                        tal:content="parentFacility/Title">Facility name</span></a>
-              </p>
-              <p>
-                <tal:ifCampusExists tal:condition="python:parentFacility.campus">
-                  <tal:campus tal:replace="context/getCampus">Campus</tal:campus>
-                  <span id="equipmentCampusLabel">campus</span>
-                </tal:ifCampusExists> 
-              </p>
-            </tal:ifParentFacilityExists>
-          </div> <!-- end equipmentFacility -->
-        </div> <!-- end equipment sidebar -->
-
         <p class="documentDescription equipmentDescription" tal:condition="exists:context/description">
           <metal:field use-macro="python:here.widget('description', mode='view')">
             Description
           </metal:field>
         </p>
-      
+        
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+        
+        <div class="equipmentImageContainer"
+             tal:condition="here/image_mini|nothing">
+          <a href="#"
+             tal:attributes="href string:$here_url/image/image_view_fullscreen"
+             id="parent-fieldname-image">
+            <img tal:replace="structure python: here.tag(scale='mini', css_class='equipmentImage')" src="" alt="" />
+          </a>
+          <p class="discreet">
+            <metal:field use-macro="python:here.widget('imageCaption', mode='view')">
+              Image Caption
+            </metal:field>
+          </p>
+        </div>
+
         <div id="equipmentContent">
           <div id="uses" tal:condition="context/uses">
             <h3>Uses</h3>
@@ -103,10 +77,25 @@
               <h3>Details</h3>
               <div tal:replace="structure context/getBody">Details (aka Body Text)</div>
             </div>
-          <tal:details>
+          </tal:details>
         </div>
       
-        <div id="equipmentClear"></div>
+        <div id="equipmentExternalUsers"
+             tal:condition="python:here.externalUsers and here.externalUsers != 'Not sure'">
+          <h3>Can researchers come to the facility and use this instrument?</h3>
+          <p><span tal:replace="context/externalUsers">Yes or No</span></p>
+        </div>
+
+        <div id="equipmentFacility">
+          <tal:ifParentFacilityExists tal:condition="exists:parentFacility/verifyFacility">
+            <h3>Equipment Location</h3>
+            <p>
+              <a href="" tal:attributes="href parentFacility/absolute_url">
+                <span id="equipmentFacilityTitle"
+                      tal:content="parentFacility/Title">Facility name</span></a>
+            </p>
+          </tal:ifParentFacilityExists>
+        </div>
 
         <div tal:replace="structure provider:plone.belowcontentbody" />
 
