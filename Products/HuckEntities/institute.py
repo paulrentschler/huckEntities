@@ -4,6 +4,7 @@
 from zope.interface import implements
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content import folder, schemata
+from Products.ATContentTypes.configuration import zconf
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from Products.Relations.field import RelationField
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
@@ -11,14 +12,14 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.HuckEntities import HuckEntitiesMessageFactory as _
 from Products.HuckEntities.interfaces import IInstitute
 
-from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View, ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 
 
 InstituteSchema = folder.ATFolderSchema.copy() + atapi.Schema((
     
     atapi.TextField(
-        name = 'text',
+        name = 'body',
         required = False,
         searchable = True,
         validators = ('isTidyHtmlWithCleanup',),
@@ -78,6 +79,7 @@ InstituteSchema = folder.ATFolderSchema.copy() + atapi.Schema((
         name = 'alternateWebSiteUrl',
         required = False,
         searchable = False,
+        write_permission="Manage Site",
         widget = atapi.StringWidget(
             label = _(u'Alternate Web Site Address'),
             description = _(u'Web site to redirect users two instead of showing a locally hosted site.')
@@ -88,6 +90,7 @@ InstituteSchema = folder.ATFolderSchema.copy() + atapi.Schema((
         name = 'contentOwners',
         required = False,
         searchable = False,
+        write_permission="Manage Site",
         widget = ReferenceBrowserWidget(
             label = _(u'Content Owners'),
             description = _(u'Indicate the people who have ownership over this area of the site.'),
@@ -111,6 +114,32 @@ class Institute(folder.ATFolder, HistoryAwareMixin):
     meta_type = "Institute"
     schema = InstituteSchema
     security = ClassSecurityInfo()
+
+    security.declareProtected(View, 'tag')
+    def tag(self, **kwargs):
+        """Generate image tag using the api of the ImageField
+        """
+        if 'title' not in kwargs:
+            kwargs['title'] = self.getImageCaption()
+        return self.getField('image').tag(self, **kwargs)
+
+    def __bobo_traverse__(self, REQUEST, name):
+        """Transparent access to image scales
+        """
+        if name.startswith('image'):
+            field = self.getField('image')
+            image = None
+            if name == 'image':
+                image = field.getScale(self)
+            else:
+                scalename = name[len('image_'):]
+                if scalename in field.getAvailableSizes(self):
+                    image = field.getScale(self, scale=scalename)
+            if image is not None and not isinstance(image, basestring):
+                # image might be None or '' for empty images
+                return image
+
+        return folder.ATFolder.__bobo_traverse__(self, REQUEST, name)
 
     ###
     # Methods to limit the referenceBrowserWidget start directory and search results    
