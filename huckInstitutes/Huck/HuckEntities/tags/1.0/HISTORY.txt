@@ -5,7 +5,3 @@ Changelog
 -------------------------------------
 * Created this product from scratch
    http://weblion.psu.edu/documentation/plone-documentation/products-from-scratch
-
-
-1.1 (Unreleased)
--------------------------------------
