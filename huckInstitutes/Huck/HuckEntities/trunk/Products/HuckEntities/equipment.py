@@ -11,10 +11,11 @@ from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 from Products.HuckEntities import HuckEntitiesMessageFactory as _
 from Products.HuckEntities.interfaces import IEquipment
 
-from Products.CMFCore.permissions import ModifyPortalContent
+from Products.CMFCore.permissions import View, ModifyPortalContent
+from AccessControl import ClassSecurityInfo
 
 
-#from Products.FacilityEquipment.interfaces import IEquipment, IFacility
+from Products.HuckEntities.interfaces import IFacility
 #from Products.Archetypes.public import DisplayList
 #from Products.CMFCore.utils import getToolByName
 
@@ -29,7 +30,9 @@ EquipmentSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             label = _(u'Equipment Type'),
             format = 'select',
         ),
-        vocabulary = [ ],
+        vocabulary = [ 'Microscope',
+                       'Other', 
+                     ],
     ),
     
     atapi.LinesField(
@@ -112,15 +115,19 @@ EquipmentSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         searchable=False,
         widget = atapi.SelectionWidget(
             label = _(u'Available for non-facility employee use?'),
-            description = _(u'Can researchers who do not work in the facility come in and use this piece of equipment? Will not display if select "Not sure."'),
+            description = _(u'Can researchers who do not work in the facility come in and use this piece of equipment? Will not be displayed if you select "Not sure."'),
         ),
-        vocabulary = [ 'Not sure', 'Yes', 'No' ],
+        vocabulary = [ 
+                       ('Not sure', 'Not sure (nothing displayed on page)'),
+                       ('Yes', 'Yes, non-facility employees can use this instrument' ),
+                       ('No', 'No, only facility employees can use this instrument')
+                     ],
     ),
 
 ))
 
 schemata.finalizeATCTSchema(EquipmentSchema, moveDiscussion=False)
-EquipmentSchema['title'].widget.label = _(u'label_model', default=u'Model')
+EquipmentSchema['title'].widget.label = _(u'Model Number')
 EquipmentSchema.moveField('equipmentType', after='title')
 
 class Equipment(base.ATCTContent):
@@ -129,13 +136,48 @@ class Equipment(base.ATCTContent):
 
     meta_type = "Equipment"
     schema = EquipmentSchema
+    security = ClassSecurityInfo()
 
-    def _getParentFacility(self):
-        """traverse up the tree structure until a parent object of type Facility is found"""
-        pnt = self.aq_parent
-        while not IFacility.providedBy(pnt):
-            pnt = pnt.aq_parent
-        return pnt
+    security.declareProtected(View, 'tag')
+    def tag(self, **kwargs):
+        """Generate image tag using the api of the ImageField
+        """
+        if 'title' not in kwargs:
+            kwargs['title'] = self.getImageCaption()
+        return self.getField('image').tag(self, **kwargs)
+
+    def __bobo_traverse__(self, REQUEST, name):
+        """Transparent access to image scales
+        """
+        if name.startswith('image'):
+            field = self.getField('image')
+            image = None
+            if name == 'image':
+                image = field.getScale(self)
+            else:
+                scalename = name[len('image_'):]
+                if scalename in field.getAvailableSizes(self):
+                    image = field.getScale(self, scale=scalename)
+            if image is not None and not isinstance(image, basestring):
+                # image might be None or '' for empty images
+                return image
+
+        return base.ATCTContent.__bobo_traverse__(self, REQUEST, name)
+
+    security.declarePublic('getParentFacility')
+    def getParentFacility(self):
+        """Traverse up the tree structure until a parent object of type Facility is found.
+           Return None if a Facility is not found.
+        """
+        parent = self.aq_parent
+        while not IFacility.providedBy(parent):
+            try:
+                parent = parent.aq_parent
+            except AttributeError:
+                parent = None
+                break;
+                
+        return parent
 
 
 
