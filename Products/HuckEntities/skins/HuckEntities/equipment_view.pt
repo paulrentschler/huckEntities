@@ -87,7 +87,7 @@
         </div>
 
         <div id="equipmentFacility">
-          <tal:ifParentFacilityExists tal:condition="exists:parentFacility/verifyFacility">
+          <tal:ifParentFacilityExists tal:condition="parentFacility">
             <h3>Equipment Location</h3>
             <p>
               <a href="" tal:attributes="href parentFacility/absolute_url">
