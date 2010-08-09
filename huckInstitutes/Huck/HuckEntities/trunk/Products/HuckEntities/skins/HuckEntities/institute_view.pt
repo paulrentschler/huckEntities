@@ -5,65 +5,113 @@
       lang="en"
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="plone">
+      
+  <div tal:condition="python: context.alternateWebSiteUrl != '' and not checkPermission('Manage Site', context)"
+       metal:fill-slot="head_slot">
+    <tal:altUrl tal:define="redirectPrefix string:0,url=;
+                            redirectUrl python: redirectPrefix + context.alternateWebSiteUrl;">
+      <meta http-equiv="refresh"
+            tal:attributes="content redirectUrl" />
+    </tal:altUrl>
+  </div>
 
   <body>
-
     <div metal:fill-slot="main">
       <tal:main-macro metal:define-macro="main"
                       tal:define="kssClassesView context/@@kss_field_decorator_view;
                                   getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                                   templateId template/getId;
-                                  text python:here.CookedBody(stx_level=2);
-                                  len_text python:len(text.strip())">
+                                  altWebSiteExists python:context.alternateWebSiteUrl != '';
+                                  isManager python:checkPermission('Manage Site', context);">
 
-        <div tal:replace="structure provider:plone.abovecontenttitle" />
+        <tal:redirecting tal:condition="python: altWebSiteExists and not isManager">
+          <p> 
+            Redirecting you to the <span tal:replace="context/Title">[item title]</span> web site
+          </p>
+        </tal:redirecting>
+        
+        <tal:showingPage tal:condition="python: not altWebSiteExists or isManager">
+          <dl class="portalMessage info"
+              tal:condition="python: altWebSiteExists and isManager">
+            <dt>Info</dt>
+            <dd>
+              You see this page because you have permission to edit this item.
+              Others will be immediately redirected to the alternate web site URL.
+            </dd>
+          </dl>
 
-        <h1 class="documentFirstHeading"> 
-          <metal:field use-macro="python:here.widget('title', mode='view')">
-            Title
-          </metal:field>
-        </h1>
+          <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-        <div tal:replace="structure provider:plone.belowcontenttitle" />
+          <h1 class="documentFirstHeading"> 
+            <metal:field use-macro="python:here.widget('title', mode='view')">
+              Title
+            </metal:field>
+          </h1>
 
-        <p class="documentDescription">
-          <metal:field use-macro="python:here.widget('description', mode='view')">
-            Description
-          </metal:field>
-        </p>
+          <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-        <div tal:replace="structure provider:plone.abovecontentbody" />
-
-        <div class="entityImageContainer"
-             tal:condition="here/image_mini|nothing">
-          <a href="#"
-             tal:attributes="href string:$here_url/image/image_view_fullscreen"
-             id="parent-fieldname-image">
-            <img tal:replace="structure python: here.tag(scale='mini', css_class='entityImage')" src="" alt="" />
-          </a>
-          <p class="discreet">
-            <metal:field use-macro="python:here.widget('imageCaption', mode='view')">
-              Image Caption
+          <p class="documentDescription">
+            <metal:field use-macro="python:here.widget('description', mode='view')">
+              Description
             </metal:field>
           </p>
-        </div>
 
-        <div metal:define-macro="text-field-view"
-             id="parent-fieldname-text" class="stx"
-             tal:define="kss_class python:getKssClasses('text',
-                         templateId=templateId, macro='text-field-view');
-                         text text|here/getText|nothing"
-             tal:condition="text"
-             tal:attributes="class python:test(here.Format() in ('text/structured',
-                                               'text/x-rst', ), 'stx' + kss_class, 'plain' + kss_class)">
-          <div metal:define-slot="inside" tal:replace="structure text">The body</div>
-        </div>
+          <div tal:replace="structure provider:plone.abovecontentbody" />
+
+          <tal:altWebSite tal:condition="altWebSiteExists">
+            <p>
+              The link address is: 
+              <a href="" tal:attributes="href context/alternateWebSiteUrl;
+                                         title context/Title; 
+                                         alt context/Title;"
+                         tal:content="context/alternateWebSiteUrl">[alternate web site url]</a>
+            </p>
+          </tal:altWebSite>
+
+          <tal:webPage tal:condition="python: not altWebSiteExists">
+            <div class="entityImageContainer"
+                 tal:condition="here/image_mini|nothing">
+              <a href="#"
+                 tal:attributes="href string:$here_url/image/image_view_fullscreen"
+                 id="parent-fieldname-image">
+                <img tal:replace="structure python: here.tag(scale='mini', css_class='entityImage')" src="" alt="" />
+              </a>
+              <p class="discreet">
+                <metal:field use-macro="python:here.widget('imageCaption', mode='view')">
+                  Image Caption
+                </metal:field>
+              </p>
+            </div>
         
-        <div metal:use-macro="here/document_relateditems/macros/relatedItems">
-          Show related items if they exist
-        </div>
+            <metal:field use-macro="python:here.widget('body', mode='view')">
+              Body text
+            </metal:field>
         
-        <div tal:replace="structure provider:plone.belowcontentbody" />
+            <div metal:use-macro="here/document_relateditems/macros/relatedItems">
+              Show related items if they exist
+            </div>
+          </tal:webPage>
+        
+          <div id="contentOwners"
+               tal:define="owners python:context.getReferences(relationship='EntityContentOwners')"
+               tal:condition="isManager">
+            <h2>Content owners</h2>
+            <p tal:condition="python: not owners"
+               class="discreet">
+              There are no content owners defined for this area.
+            </p>
+            <ul tal:condition="owners">
+              <li tal:repeat="owner owners">
+                <a tal:define="url owner/absolute_url;
+                               name owner/Title"
+                   tal:attributes="href url"
+                   tal:content="name">[Content owner's full name]</a>
+              </li>
+            </ul>
+          </div>
+        
+          <div tal:replace="structure provider:plone.belowcontentbody" />
+        </tal:showingPage>
 
       </tal:main-macro>
     </div>
