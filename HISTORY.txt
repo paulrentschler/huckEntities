@@ -9,8 +9,15 @@ Changelog
 
 1.1 (17 August 2010)
 -------------------------------------
-* Added the Portlet Holder object to allow for a default view to hang portlets onto that
-   do not bleed through to sub-objects
+* Added the Portlet Holder object to allow for a default view to 
+   hang portlets onto that do not bleed through to sub-objects
+
+
+1.1.1 (17 August 2010)
+-------------------------------------
+* Fixed a display issue on Institutes, Centers, Facilities, and
+   Graduate Programs caused because of the new calls being made
+   by the page templates to support the Portlet Holder object
 
 
 1.2 (Unreleased)

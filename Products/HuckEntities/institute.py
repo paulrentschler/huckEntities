@@ -138,8 +138,19 @@ class Institute(folder.ATFolder, HistoryAwareMixin):
             if image is not None and not isinstance(image, basestring):
                 # image might be None or '' for empty images
                 return image
-
+                
         return folder.ATFolder.__bobo_traverse__(self, REQUEST, name)
+
+    def getParentTitle(self):
+        """Here to maintain compatibility with the page template 
+           calls that support the Portal Holder object
+           """
+        return self.Title()
+
+    def getContentOwners(self):
+        """Returns the referenced content owners"""
+        return self.getReferences(relationship='EntityContentOwners')
+
 
     ###
     # Methods to limit the referenceBrowserWidget start directory and search results    
