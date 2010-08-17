@@ -19,6 +19,7 @@ import center
 import graduate_program
 import facility
 import equipment
+import portletholder
 
 
 DEFAULT_ADD_CONTENT_PERMISSION = "Add portal content"
@@ -30,6 +31,7 @@ ADD_PERMISSIONS = {
     'GraduateProgram' : DEFAULT_ADD_CONTENT_PERMISSION,
     'Facility' : DEFAULT_ADD_CONTENT_PERMISSION,
     'Equipment' : DEFAULT_ADD_CONTENT_PERMISSION,
+    'PortletHolder' : DEFAULT_ADD_CONTENT_PERMISSION,
 }
 
 PRODUCT_NAME = 'HuckEntities'

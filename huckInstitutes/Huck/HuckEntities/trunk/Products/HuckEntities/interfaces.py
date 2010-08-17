@@ -16,6 +16,9 @@ class IFacility(Interface):
 class IEquipment(Interface):
     """A piece of research instrumentation"""
 
+class IPortletHolder(Interface):
+    """A placeholder for content well portlets"""
+
 class IHuckEntitiesLayer(IDefaultPloneLayer):
     """A Layer Specific to HuckEntities"""
     
