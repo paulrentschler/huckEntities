@@ -10,8 +10,4 @@ Changelog
 1.1 (17 August 2010)
 -------------------------------------
 * Added the Portlet Holder object to allow for a default view to hang portlets onto that
-   do not bleed through to sub-objects
-
-
-1.2 (Unreleased)
--------------------------------------
+  do not bleed through to sub-objects
