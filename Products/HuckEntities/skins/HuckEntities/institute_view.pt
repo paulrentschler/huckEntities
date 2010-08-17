@@ -26,7 +26,7 @@
 
         <tal:redirecting tal:condition="python: altWebSiteExists and not isManager">
           <p> 
-            Redirecting you to the <span tal:replace="context/Title">[item title]</span> web site
+            Redirecting you to the <span tal:replace="context/parentTitle">[item title]</span> web site
           </p>
         </tal:redirecting>
         
@@ -42,19 +42,11 @@
 
           <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-          <h1 class="documentFirstHeading"> 
-            <metal:field use-macro="python:here.widget('title', mode='view')">
-              Title
-            </metal:field>
-          </h1>
+          <h1 class="documentFirstHeading" tal:content="context/getParentTitle">[Parent Title]</h1>
 
           <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-          <p class="documentDescription">
-            <metal:field use-macro="python:here.widget('description', mode='view')">
-              Description
-            </metal:field>
-          </p>
+          <p class="documentDescription" tal:content="context/Description">[Description]</p>
 
           <div tal:replace="structure provider:plone.abovecontentbody" />
 
@@ -62,8 +54,8 @@
             <p>
               The link address is: 
               <a href="" tal:attributes="href context/alternateWebSiteUrl;
-                                         title context/Title; 
-                                         alt context/Title;"
+                                         title context/getParentTitle; 
+                                         alt context/getParentTitle;"
                          tal:content="context/alternateWebSiteUrl">[alternate web site url]</a>
             </p>
           </tal:altWebSite>
@@ -76,24 +68,20 @@
                  id="parent-fieldname-image">
                 <img tal:replace="structure python: here.tag(scale='mini', css_class='entityImage')" src="" alt="" />
               </a>
-              <p class="discreet">
-                <metal:field use-macro="python:here.widget('imageCaption', mode='view')">
-                  Image Caption
-                </metal:field>
+              <p class="discreet" tal:content="context/imageCaption">
+                [Image Caption]
               </p>
             </div>
-        
-            <metal:field use-macro="python:here.widget('body', mode='view')">
-              Body text
-            </metal:field>
-        
+            
+            <div tal:replace="structure context/body">[Body text]</div>
+            
             <div metal:use-macro="here/document_relateditems/macros/relatedItems">
               Show related items if they exist
             </div>
           </tal:webPage>
         
           <div id="contentOwners"
-               tal:define="owners python:context.getReferences(relationship='EntityContentOwners')"
+               tal:define="owners python:context.getContentOwners()"
                tal:condition="isManager">
             <h2>Content owners</h2>
             <p tal:condition="python: not owners"
