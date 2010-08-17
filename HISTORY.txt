@@ -7,5 +7,11 @@ Changelog
    http://weblion.psu.edu/documentation/plone-documentation/products-from-scratch
 
 
-1.1 (Unreleased)
+1.1 (17 August 2010)
+-------------------------------------
+* Added the Portlet Holder object to allow for a default view to hang portlets onto that
+   do not bleed through to sub-objects
+
+
+1.2 (Unreleased)
 -------------------------------------

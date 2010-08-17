@@ -2,7 +2,7 @@
 <object name="PortletHolder"
         meta_type="Factory-based Type Information with dynamic views"
         i18n:domain="plone" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
-  <property name="title" i18n:translate="">PortletHolder</property>
+  <property name="title" i18n:translate="">Portlet Holder</property>
   <property name="description"
             i18n:translate="">A content well portlet holder for Institutes, Centers, Facilities, and Graduate Programs.</property>
   <property name="content_icon">document_icon.gif</property>
