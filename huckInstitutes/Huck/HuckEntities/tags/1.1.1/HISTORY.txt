@@ -1,0 +1,20 @@
+Changelog
+=========
+
+1.0 (9 August 2010)
+-------------------------------------
+* Created this product from scratch
+   http://weblion.psu.edu/documentation/plone-documentation/products-from-scratch
+
+
+1.1 (17 August 2010)
+-------------------------------------
+* Added the Portlet Holder object to allow for a default view to 
+   hang portlets onto that do not bleed through to sub-objects
+
+
+1.1.1 (17 August 2010)
+-------------------------------------
+* Fixed a display issue on Institutes, Centers, Facilities, and
+   Graduate Programs caused because of the new calls being made
+   by the page templates to support the Portlet Holder object
