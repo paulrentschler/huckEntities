@@ -25,7 +25,7 @@ class PortletHolder(base.ATCTContent):
     schema = PortletHolderSchema
     security = ClassSecurityInfo()
 
-    def Title(self):
+    def getParentTitle(self):
         return self.aq_parent.Title()
         
     def Description(self):
@@ -47,7 +47,7 @@ class PortletHolder(base.ATCTContent):
         return self.aq_parent.getAlternateWebSiteUrl()
         
     def getContentOwners(self):
-        return self.aq_parent.getContentOwners()
+        return self.aq_parent.getReferences(relationship='EntityContentOwners')
         
 
 atapi.registerType(PortletHolder, 'HuckEntities')
