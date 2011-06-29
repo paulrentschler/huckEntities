@@ -155,7 +155,7 @@ EquipmentSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         ),
         allowed_types = ('Equipment'),
         multiValued = False,
-        relationship = 'FacilityEquipmentReplacementEquipment',
+        relationship = 'EntityReplacementEquipment',
     ),
 
 ))
@@ -203,7 +203,7 @@ class Equipment(base.ATCTOrderedFolder):
     def getReplacementEquipment(self):
         """Returns the referenced equipment that replaces this one
            """
-        return self.getReferences(relationship='FacilityEquipmentReplacementEquipment')
+        return self.getReferences(relationship='EntityReplacementEquipment')
 
     security.declarePublic('getParentFacility')
     def getParentFacility(self):
