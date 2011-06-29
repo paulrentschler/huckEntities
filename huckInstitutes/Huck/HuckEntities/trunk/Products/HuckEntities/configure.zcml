@@ -12,9 +12,9 @@
 
     <genericsetup:registerProfile
         name="uninstall"
-        title="ResearchProject"
+        title="HuckEntities"
         directory="profiles/uninstall"
-        description="Removes the research project content type"
+        description="Removes the custom Huck Institutes content types"
         provides="Products.GenericSetup.interfaces.EXTENSION"
     />
 
