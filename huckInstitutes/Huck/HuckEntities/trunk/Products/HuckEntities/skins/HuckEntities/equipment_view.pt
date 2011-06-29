@@ -14,7 +14,8 @@
                                   getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
                                   templateId template/getId;
                                   text here/getBody;
-                                  parentFacility python: context.getParentFacility();">
+                                  parentFacility python: context.getParentFacility();
+                                  isExpired python:context.contentExpired()">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
 
@@ -40,7 +41,22 @@
         
         <div tal:replace="structure provider:plone.abovecontentbody" />
         
-        <div id="equipmentSidebar">
+        <div class="portalMessage"
+             tal:define="replacementEquipment here/getReplacementEquipment|nothing"
+             tal:condition="isExpired">
+
+          <tal:replaced tal:condition="replacementEquipment">
+            <strong>Please Note:</strong> This piece of equipment has been 
+            <a tal:attributes="href python:replacementEquipment[0].absolute_url()">replaced with <span tal:content="python: replacementEquipment[0].Title()">[new equipment title]</span></a>.
+          </tal:replaced>
+
+          <tal:notavailable tal:condition="not: replacementEquipment">
+            <strong>Please Note:</strong> This piece of equipment is no longer available for use.
+          </tal:notavailable>
+        </div>
+
+        <div id="equipmentSidebar"
+             tal:condition="not: isExpired">
           <div class="equipmentImageContainer"
                tal:condition="here/image_mini|nothing">
             <a href="#"
@@ -98,7 +114,8 @@
           </div>
         </div>
 
-        <div id="equipmentContent">
+        <div id="equipmentContent"
+             tal:condition="not: isExpired">
           <div id="uses" tal:condition="context/uses">
             <h3>Uses</h3>
             <ul class="equipmentList"
@@ -125,12 +142,13 @@
         </div>
       
         <div id="equipmentExternalUsers"
-             tal:condition="python:here.externalUsers and here.externalUsers != 'Not sure'">
+             tal:condition="python:isExpired and here.externalUsers and here.externalUsers != 'Not sure'">
           <h3>Can researchers come to the facility and use this instrument?</h3>
           <p><span tal:replace="context/externalUsers">Yes or No</span></p>
         </div>
 
-        <div id="equipmentFacility">
+        <div id="equipmentFacility"
+             tal:condition="not: isExpired">
           <tal:ifParentFacilityExists tal:condition="parentFacility">
             <h3>Equipment Location</h3>
             <p>
