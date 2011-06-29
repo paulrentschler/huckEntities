@@ -1,0 +1,149 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="en"
+      lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+
+  <body>
+    <metal:fill fill-slot="main">
+      <tal:main-macro metal:define-macro="main"
+                      tal:define="kssClassesView context/@@kss_field_decorator_view;
+                                  getKssClasses nocall:kssClassesView/getKssClassesInlineEditable;
+                                  templateId template/getId;
+                                  text here/getBody;
+                                  parentFacility python: context.getParentFacility();">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading equipmentHeading">
+          <tal:type tal:repeat="eqType context/getEquipmentType">
+            <span tal:replace="eqType">Type of Equipment</span>
+          </tal:type>
+        </h1>
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <p class="equipmentModelNumber">
+          <span id="equipmentModelNumberLabel">Model #:</span>
+          <metal:field use-macro="python:here.widget('title', mode='view')">
+            Title
+          </metal:field>
+        </p>
+        <p class="documentDescription equipmentDescription" tal:condition="exists:context/description">
+          <metal:field use-macro="python:here.widget('description', mode='view')">
+            Description
+          </metal:field>
+        </p>
+        
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+        
+        <div id="equipmentSidebar">
+          <div class="equipmentImageContainer"
+               tal:condition="here/image_mini|nothing">
+            <a href="#"
+               tal:attributes="href string:$here_url/image/image_view_fullscreen"
+               id="parent-fieldname-image">
+              <img tal:replace="structure python: here.tag(scale='mini', css_class='equipmentImage')" src="" alt="" />
+            </a>
+            <p class="discreet">
+              <metal:field use-macro="python:here.widget('imageCaption', mode='view')">
+                Image Caption
+              </metal:field>
+            </p>
+          </div>
+          
+          <div id="equipmentDocumentation"
+               tal:define="getInfoFor python:wtool.getInfoFor;
+                           docList python:context.getFolderContents()"
+               tal:condition="python:docList">
+            <h3>Documentation</h3>
+            <dl class="documentationList" tal:repeat="doc docList">
+              <dt tal:define="item_title_or_id doc/pretty_title_or_id;
+                              item_icon python:plone_view.getIcon(doc);
+                              item_wf_state doc/review_state|python: getInfoFor(doc, 'review_state', '');
+                              item_wf_state_class python: 'state-' + normalizeString(item_wf_state);">
+                <img tal:replace="structure item_icon/html_tag" />
+                <a tal:attributes="href  doc/getURL;
+                                   title doc/Description;
+                                   class string:$item_wf_state_class"
+                   tal:content="item_title_or_id">document title</a>
+              </dt>
+              <dd tal:condition="doc/Description"
+                  tal:content="doc/Description">document description</dd>
+            </dl>
+          </div>
+
+          <div id="equipmentRelated"
+               tal:define="getInfoFor python:wtool.getInfoFor;
+                           related python:here.computeRelatedItems();"
+               tal:condition="related">
+            <h3>Related information</h3>
+            <dl class="documentationList" tal:repeat="item related">
+              <dt tal:define="item_title_or_id item/pretty_title_or_id;
+                              item_icon python:plone_view.getIcon(item);
+                              item_wf_state item/review_state|python: getInfoFor(item, 'review_state', '');
+                              item_wf_state_class python: 'state-' + normalizeString(item_wf_state);">
+                <img tal:replace="structure item_icon/html_tag" />
+                <a tal:attributes="href  item/absolute_url;
+                                   title item/Description;
+                                   class string:$item_wf_state_class"
+                   tal:content="item_title_or_id">document title</a>
+              </dt>
+              <dd tal:condition="item/Description"
+                  tal:content="item/Description">document description</dd>
+            </dl>
+          </div>
+        </div>
+
+        <div id="equipmentContent">
+          <div id="uses" tal:condition="context/uses">
+            <h3>Uses</h3>
+            <ul class="equipmentList"
+                tal:repeat="use context/uses">
+              <li tal:content="use">use</li>
+            </ul>
+          </div>
+          
+          <div id="specs" tal:condition="context/specifications">
+            <h3>Specifications</h3>
+            <ul class="equipmentList"
+                tal:repeat="spec context/specifications">
+              <li tal:content="spec">specification</li>
+            </ul>
+          </div>
+        
+          <tal:details tal:define="details context/body;
+                                   emptyDetails python: len(details) <= 11;">
+            <div tal:condition="not: emptyDetails" class="details">
+              <h3>Details</h3>
+              <div tal:replace="structure context/getBody">Details (aka Body Text)</div>
+            </div>
+          </tal:details>
+        </div>
+      
+        <div id="equipmentExternalUsers"
+             tal:condition="python:here.externalUsers and here.externalUsers != 'Not sure'">
+          <h3>Can researchers come to the facility and use this instrument?</h3>
+          <p><span tal:replace="context/externalUsers">Yes or No</span></p>
+        </div>
+
+        <div id="equipmentFacility">
+          <tal:ifParentFacilityExists tal:condition="parentFacility">
+            <h3>Equipment Location</h3>
+            <p>
+              <a href="" tal:attributes="href parentFacility/absolute_url">
+                <span id="equipmentFacilityTitle"
+                      tal:content="parentFacility/Title">Facility name</span></a>
+            </p>
+          </tal:ifParentFacilityExists>
+        </div>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+      </tal:main-macro>
+    </metal:fill>
+  </body>
+</html>
