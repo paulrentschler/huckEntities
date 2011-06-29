@@ -3,7 +3,7 @@
 
 from zope.interface import implements
 from Products.Archetypes import atapi
-from Products.ATContentTypes.content import folder, schemata
+from Products.ATContentTypes.content import base, schemata
 from Products.ATContentTypes.configuration import zconf
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from Products.Relations.field import RelationField
@@ -16,7 +16,7 @@ from Products.CMFCore.permissions import View, ModifyPortalContent
 from AccessControl import ClassSecurityInfo
 
 
-InstituteSchema = folder.ATFolderSchema.copy() + atapi.Schema((
+InstituteSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     
     atapi.TextField(
         name = 'body',
@@ -107,7 +107,7 @@ InstituteSchema = folder.ATFolderSchema.copy() + atapi.Schema((
 
 ))
 
-class Institute(folder.ATFolder, HistoryAwareMixin):
+class Institute(base.ATCTOrderedFolder, HistoryAwareMixin):
     """An Institute"""
     implements(IInstitute)
 
