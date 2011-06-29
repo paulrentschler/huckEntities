@@ -3,7 +3,7 @@
 
 from zope.interface import implements
 from Products.Archetypes import atapi
-from Products.ATContentTypes.content import base, schemata
+from Products.ATContentTypes.content import base, folder, schemata
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from Products.Relations.field import RelationField
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
@@ -198,7 +198,7 @@ class Equipment(base.ATCTOrderedFolder, HistoryAwareMixin):
                 # image might be None or '' for empty images
                 return image
 
-        return base.ATCTContent.__bobo_traverse__(self, REQUEST, name)
+        return base.ATCTOrderedFolder.__bobo_traverse__(self, REQUEST, name)
 
     security.declarePublic('getReplacementEquipment')
     def getReplacementEquipment(self):
