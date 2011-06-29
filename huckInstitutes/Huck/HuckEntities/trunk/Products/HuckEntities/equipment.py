@@ -6,6 +6,7 @@ from Products.Archetypes import atapi
 from Products.ATContentTypes.content import base, schemata
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from Products.Relations.field import RelationField
+from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 
 from Products.HuckEntities import HuckEntitiesMessageFactory as _
 from Products.HuckEntities.interfaces import IEquipment, IFacility
@@ -164,7 +165,7 @@ schemata.finalizeATCTSchema(EquipmentSchema, moveDiscussion=False)
 EquipmentSchema['title'].widget.label = _(u'Model Number')
 EquipmentSchema.moveField('equipmentType', after='title')
 
-class Equipment(base.ATCTOrderedFolder):
+class Equipment(base.ATCTOrderedFolder, HistoryAwareMixin):
     """A piece of equipment"""
     implements(IEquipment)
 
