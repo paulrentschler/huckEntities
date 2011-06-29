@@ -1,0 +1,37 @@
+Changelog
+=========
+
+1.0 (9 August 2010)
+-------------------------------------
+* Created this product from scratch
+   http://weblion.psu.edu/documentation/plone-documentation/products-from-scratch
+
+
+1.1 (17 August 2010)
+-------------------------------------
+* Added the Portlet Holder object to allow for a default view to 
+   hang portlets onto that do not bleed through to sub-objects
+
+
+1.1.1 (17 August 2010)
+-------------------------------------
+* Fixed a display issue on Institutes, Centers, Facilities, and
+   Graduate Programs caused because of the new calls being made
+   by the page templates to support the Portlet Holder object
+
+
+1.2 (29 June 2011)
+-------------------------------------
+* Updated equipment to be folderish and have history support.
+* Updated the equipment template to show contained and
+   related files.
+* Updated what content types institutes, centers, facilities,
+   and equipment are based on ensuring that they all have
+   history support.
+
+
+1.2.1 (29 June 2011)
+-------------------------------------
+* Fixed a bunch of implementation problems due to not testing
+   prior to releasing version 1.2
+* Added the retired message to the equipment view.
