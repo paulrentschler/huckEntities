@@ -35,3 +35,7 @@ Changelog
 * Fixed a bunch of implementation problems due to not testing
    prior to releasing version 1.2
 * Added the retired message to the equipment view.
+
+
+1.3 (Unreleased)
+-------------------------------------
