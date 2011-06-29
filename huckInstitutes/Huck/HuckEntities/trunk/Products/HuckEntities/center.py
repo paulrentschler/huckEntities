@@ -3,6 +3,7 @@
 
 from zope.interface import implements
 from Products.Archetypes import atapi
+from Products.ATContentTypes.content import schemata
 
 from Products.HuckEntities import HuckEntitiesMessageFactory as _
 from Products.HuckEntities.interfaces import ICenter
