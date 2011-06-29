@@ -40,18 +40,62 @@
         
         <div tal:replace="structure provider:plone.abovecontentbody" />
         
-        <div class="equipmentImageContainer"
-             tal:condition="here/image_mini|nothing">
-          <a href="#"
-             tal:attributes="href string:$here_url/image/image_view_fullscreen"
-             id="parent-fieldname-image">
-            <img tal:replace="structure python: here.tag(scale='mini', css_class='equipmentImage')" src="" alt="" />
-          </a>
-          <p class="discreet">
-            <metal:field use-macro="python:here.widget('imageCaption', mode='view')">
-              Image Caption
-            </metal:field>
-          </p>
+        <div id="equipmentSidebar">
+          <div class="equipmentImageContainer"
+               tal:condition="here/image_mini|nothing">
+            <a href="#"
+               tal:attributes="href string:$here_url/image/image_view_fullscreen"
+               id="parent-fieldname-image">
+              <img tal:replace="structure python: here.tag(scale='mini', css_class='equipmentImage')" src="" alt="" />
+            </a>
+            <p class="discreet">
+              <metal:field use-macro="python:here.widget('imageCaption', mode='view')">
+                Image Caption
+              </metal:field>
+            </p>
+          </div>
+          
+          <div id="equipmentDocumentation"
+               tal:define="getInfoFor python:wtool.getInfoFor;
+                           docList python:context.getFolderContents()"
+               tal:condition="python:docList">
+            <h3>Documentation</h3>
+            <dl class="documentationList" tal:repeat="doc docList">
+              <dt tal:define="item_title_or_id doc/pretty_title_or_id;
+                              item_icon python:plone_view.getIcon(doc);
+                              item_wf_state doc/review_state|python: getInfoFor(doc, 'review_state', '');
+                              item_wf_state_class python: 'state-' + normalizeString(item_wf_state);">
+                <img tal:replace="structure item_icon/html_tag" />
+                <a tal:attributes="href  doc/getURL;
+                                   title doc/Description;
+                                   class string:$item_wf_state_class"
+                   tal:content="item_title_or_id">document title</a>
+              </dt>
+              <dd tal:condition="doc/Description"
+                  tal:content="doc/Description">document description</dd>
+            </dl>
+          </div>
+
+          <div id="equipmentRelated"
+               tal:define="getInfoFor python:wtool.getInfoFor;
+                           related python:here.computeRelatedItems();"
+               tal:condition="related">
+            <h3>Related information</h3>
+            <dl class="documentationList" tal:repeat="item related">
+              <dt tal:define="item_title_or_id item/pretty_title_or_id;
+                              item_icon python:plone_view.getIcon(item);
+                              item_wf_state item/review_state|python: getInfoFor(item, 'review_state', '');
+                              item_wf_state_class python: 'state-' + normalizeString(item_wf_state);">
+                <img tal:replace="structure item_icon/html_tag" />
+                <a tal:attributes="href  item/absolute_url;
+                                   title item/Description;
+                                   class string:$item_wf_state_class"
+                   tal:content="item_title_or_id">document title</a>
+              </dt>
+              <dd tal:condition="item/Description"
+                  tal:content="item/Description">document description</dd>
+            </dl>
+          </div>
         </div>
 
         <div id="equipmentContent">
