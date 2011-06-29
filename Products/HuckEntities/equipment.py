@@ -6,18 +6,12 @@ from Products.Archetypes import atapi
 from Products.ATContentTypes.content import base, schemata
 from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
 from Products.Relations.field import RelationField
-from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 
 from Products.HuckEntities import HuckEntitiesMessageFactory as _
-from Products.HuckEntities.interfaces import IEquipment
+from Products.HuckEntities.interfaces import IEquipment, IFacility
 
 from Products.CMFCore.permissions import View, ModifyPortalContent
 from AccessControl import ClassSecurityInfo
-
-
-from Products.HuckEntities.interfaces import IFacility
-#from Products.Archetypes.public import DisplayList
-#from Products.CMFCore.utils import getToolByName
 
 
 EquipmentSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
@@ -146,19 +140,38 @@ EquipmentSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
                      ],
     ),
 
+    RelationField(
+        name = 'replacementEquipment',
+        required = False,
+        searchable = False,
+        widget = ReferenceBrowserWidget(
+            label = _(u'Replacement'),
+            description = _(u'Select the piece of equipment that replaces this one.'),
+            base_query = "_search_equipment",
+            allow_browse = 1,
+            allow_search = 1,
+            show_results_without_query = 1,
+            startup_directory_method = "_get_equipment_path",
+        ),
+        allowed_types = ('Equipment'),
+        multiValued = False,
+        relationship = 'FacilityEquipmentReplacementEquipment',
+    ),
+
 ))
 
 schemata.finalizeATCTSchema(EquipmentSchema, moveDiscussion=False)
 EquipmentSchema['title'].widget.label = _(u'Model Number')
 EquipmentSchema.moveField('equipmentType', after='title')
 
-class Equipment(base.ATCTContent):
+class Equipment(base.ATCTOrderedFolder):
     """A piece of equipment"""
     implements(IEquipment)
 
     meta_type = "Equipment"
     schema = EquipmentSchema
     security = ClassSecurityInfo()
+
 
     security.declareProtected(View, 'tag')
     def tag(self, **kwargs):
@@ -186,6 +199,12 @@ class Equipment(base.ATCTContent):
 
         return base.ATCTContent.__bobo_traverse__(self, REQUEST, name)
 
+    security.declarePublic('getReplacementEquipment')
+    def getReplacementEquipment(self):
+        """Returns the referenced equipment that replaces this one
+           """
+        return self.getReferences(relationship='FacilityEquipmentReplacementEquipment')
+
     security.declarePublic('getParentFacility')
     def getParentFacility(self):
         """Traverse up the tree structure until a parent object of type Facility is found.
@@ -201,6 +220,21 @@ class Equipment(base.ATCTContent):
                 
         return parent
 
+    ###
+    # Methods to limit the referenceBrowserWidget start directory and search results    
+    security.declareProtected(ModifyPortalContent, '_search_equipment')
+    def _search_equipment(self):
+        """Return a query dictionary to limit the search parameters for a reference browser
+           widget query. Search only for Equipment.
+           """
+        return {'portal_type': 'Equipment',
+                'sort_on': 'sortable_title'}
+
+    security.declareProtected(ModifyPortalContent, '_get_equipment_path')
+    def _get_equipment_path(self):
+        """Return the path to the object's parent
+           """
+        return '/'.join(self.getPhysicalPath())
 
 
 atapi.registerType(Equipment, 'HuckEntities')
