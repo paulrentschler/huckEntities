@@ -27,6 +27,7 @@ setup(name='Products.HuckEntities',
     install_requires=[
       'setuptools',
       # -*- Extra requirements: -*-
+      'Products.Relations>=0.8.1',
       ],
     entry_points="""
       # -*- Entry points: -*-
