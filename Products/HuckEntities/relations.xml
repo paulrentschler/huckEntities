@@ -1,12 +1,20 @@
 <?xml version="1.0" ?>
 <RelationsLibrary>
-	<RulesetCollection id="HuckEntities">
-		<Ruleset id="EntityContentOwners" uid="">
-			<TypeConstraint id="type_constraint">
-				<allowedTargetType>
-					FSDPerson
-				</allowedTargetType>
-			</TypeConstraint>
-		</Ruleset>
-	</RulesetCollection>
+  <RulesetCollection id="HuckEntities">
+    <Ruleset id="EntityContentOwners" uid="">
+      <TypeConstraint id="type_constraint">
+        <allowedTargetType>
+          FSDPerson
+        </allowedTargetType>
+      </TypeConstraint>
+    </Ruleset>
+    <Ruleset id="EntityReplacementEquipment" uid="">
+      <TypeConstraint id="type_constraint">
+        <allowedTargetType>
+          Equipment
+        </allowedTargetType>
+      </TypeConstraint>
+    </Ruleset>
+  </RulesetCollection>
+
 </RelationsLibrary>
