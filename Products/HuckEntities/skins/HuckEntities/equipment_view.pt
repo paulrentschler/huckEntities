@@ -56,7 +56,11 @@
         </div>
 
         <div id="equipmentSidebar"
-             tal:condition="not: isExpired">
+             tal:define="getInfoFor python:wtool.getInfoFor;
+                         docList python:context.getFolderContents();
+                         related python:here.computeRelatedItems();
+                         hasImage here/image_mini|nothing;"
+             tal:condition="python: not isExpired and (hasImage or docList or related)">
           <div class="equipmentImageContainer"
                tal:condition="here/image_mini|nothing">
             <a href="#"
@@ -72,8 +76,6 @@
           </div>
           
           <div id="equipmentDocumentation"
-               tal:define="getInfoFor python:wtool.getInfoFor;
-                           docList python:context.getFolderContents()"
                tal:condition="python:docList">
             <h3>Documentation</h3>
             <dl class="documentationList" tal:repeat="doc docList">
@@ -93,8 +95,6 @@
           </div>
 
           <div id="equipmentRelated"
-               tal:define="getInfoFor python:wtool.getInfoFor;
-                           related python:here.computeRelatedItems();"
                tal:condition="related">
             <h3>Related information</h3>
             <dl class="documentationList" tal:repeat="item related">
