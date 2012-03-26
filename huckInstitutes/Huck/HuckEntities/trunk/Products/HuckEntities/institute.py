@@ -5,7 +5,7 @@ from zope.interface import implements
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content import base, folder, schemata
 from Products.ATContentTypes.configuration import zconf
-from Products.ATReferenceBrowserWidget.ATReferenceBrowserWidget import ReferenceBrowserWidget
+from archetypes.referencebrowserwidget.widget import ReferenceBrowserWidget
 from Products.Relations.field import RelationField
 from Products.ATContentTypes.lib.historyaware import HistoryAwareMixin
 
