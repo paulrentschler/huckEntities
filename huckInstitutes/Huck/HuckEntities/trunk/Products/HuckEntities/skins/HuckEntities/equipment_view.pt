@@ -56,7 +56,10 @@
         </div>
 
         <div id="equipmentSidebar"
-             tal:define="getInfoFor python:wtool.getInfoFor;
+             tal:define="wtool context/portal_workflow;
+                         getInfoFor python:wtool.getInfoFor;
+                         normalizeString nocall:context/@@plone/normalizeString;
+                         here_url context/@@plone_context_state/object_url;
                          docList python:context.getFolderContents();
                          related python:here.computeRelatedItems();
                          hasImage here/image_mini|nothing;"
@@ -77,7 +80,7 @@
           
           <div id="equipmentDocumentation"
                tal:condition="python:docList">
-            <h3>Documentation</h3>
+            <h2>Documentation</h2>
             <dl class="documentationList" tal:repeat="doc docList">
               <dt tal:define="item_title_or_id doc/pretty_title_or_id;
                               item_icon python:plone_view.getIcon(doc);
@@ -96,7 +99,7 @@
 
           <div id="equipmentRelated"
                tal:condition="related">
-            <h3>Related information</h3>
+            <h2>Related information</h2>
             <dl class="documentationList" tal:repeat="item related">
               <dt tal:define="item_title_or_id item/pretty_title_or_id;
                               item_icon python:plone_view.getIcon(item);
@@ -117,7 +120,7 @@
         <div id="equipmentContent"
              tal:condition="not: isExpired">
           <div id="uses" tal:condition="context/uses">
-            <h3>Uses</h3>
+            <h2>Uses</h2>
             <ul class="equipmentList"
                 tal:repeat="use context/uses">
               <li tal:content="use">use</li>
@@ -125,7 +128,7 @@
           </div>
           
           <div id="specs" tal:condition="context/specifications">
-            <h3>Specifications</h3>
+            <h2>Specifications</h2>
             <ul class="equipmentList"
                 tal:repeat="spec context/specifications">
               <li tal:content="spec">specification</li>
@@ -135,7 +138,7 @@
           <tal:details tal:define="details context/body;
                                    emptyDetails python: len(details) <= 11;">
             <div tal:condition="not: emptyDetails" class="details">
-              <h3>Details</h3>
+              <h2>Details</h2>
               <div tal:replace="structure context/getBody">Details (aka Body Text)</div>
             </div>
           </tal:details>
@@ -143,14 +146,14 @@
       
         <div id="equipmentExternalUsers"
              tal:condition="python:isExpired and here.externalUsers and here.externalUsers != 'Not sure'">
-          <h3>Can researchers come to the facility and use this instrument?</h3>
+          <h2>Can researchers come to the facility and use this instrument?</h2>
           <p><span tal:replace="context/externalUsers">Yes or No</span></p>
         </div>
 
         <div id="equipmentFacility"
              tal:condition="not: isExpired">
           <tal:ifParentFacilityExists tal:condition="parentFacility">
-            <h3>Equipment Location</h3>
+            <h2>Equipment Location</h2>
             <p>
               <a href="" tal:attributes="href parentFacility/absolute_url">
                 <span id="equipmentFacilityTitle"
