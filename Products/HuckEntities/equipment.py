@@ -28,6 +28,7 @@ EquipmentSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         vocabulary = [ '-- Other --',
                        'Arrayer',
                        'Bioanalyzer',
+                       'Biolayer Interferometer',
                        'Bioreactor',
                        'Calorimeter',
                        'Cell Sorter',
