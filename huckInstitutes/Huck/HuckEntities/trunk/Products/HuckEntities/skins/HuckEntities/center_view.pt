@@ -35,7 +35,11 @@
         </dd>
       </dl>
     </tal:message>
-  
+
+    <!-- do not show page title on facilities view 
+         per https://trac.sixfeetup.com/huck/ticket/274 -->
+    <metal:content-title fill-slot="content-title"></metal:content-title>
+
     <metal:content-core fill-slot="content-core">
       <metal:block define-macro="content-core">
         <metal:body define-macro="body_macro"
