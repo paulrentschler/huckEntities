@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<import-steps>
+    <import-step id="huckentities_versioningpolicy"
+                 version="20100624-01"
+                 handler="Products.HuckEntities.setuphandlers.importVersioningPolicy"
+                 title="Import step for Products.HuckEntities to set versioning policies">
+        Loads versioning policy for Products.HuckEntities.
+    </import-step>
+    
+    <import-step id="Products.HuckEntities.setupRelations"
+                 version=""
+                 title="HuckEntities: add Relations configuration"
+                 handler="Products.HuckEntities.setuphandlers.setupRelations">
+        Import step for Products.HuckEntities to configure relations
+    </import-step>
+    
+</import-steps>
